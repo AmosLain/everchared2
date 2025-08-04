@@ -1,0 +1,45 @@
+<svg width="300" height="120" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lightningGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffeb3b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffc107;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Logo icon circle -->
+  <circle cx="60" cy="60" r="45" fill="url(#bgGradient)" filter="url(#shadow)"/>
+  
+  <!-- Lightning bolt -->
+  <path d="M45 35 L65 35 L55 55 L70 55 L50 85 L60 65 L45 65 Z" 
+        fill="url(#lightningGradient)" 
+        stroke="#fff" 
+        stroke-width="1"/>
+  
+  <!-- Small charging plug icon -->
+  <rect x="70" y="45" width="8" height="12" rx="2" fill="#fff" opacity="0.9"/>
+  <rect x="72" y="47" width="4" height="2" fill="url(#bgGradient)"/>
+  <rect x="72" y="51" width="4" height="2" fill="url(#bgGradient)"/>
+  
+  <!-- Text "EV ChargeMap" -->
+  <text x="130" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333">
+    <tspan fill="#667eea">EV</tspan>
+    <tspan fill="#333"> ChargeMap</tspan>
+  </text>
+  
+  <!-- Tagline -->
+  <text x="130" y="65" font-family="Arial, sans-serif" font-size="12" fill="#666">
+    Find Charging Stations
+  </text>
+  
+  <!-- Small location pin -->
+  <circle cx="270" cy="50" r="3" fill="#667eea"/>
+  <path d="M270 45 L270 55 M265 50 L275 50" stroke="#667eea" stroke-width="1"/>
+</svg>

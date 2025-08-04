@@ -1,0 +1,54 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lightningGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffeb3b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffc107;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Main background circle -->
+  <circle cx="90" cy="90" r="75" fill="url(#bgGradient)" filter="url(#shadow)"/>
+  
+  <!-- Lightning bolt - larger and centered -->
+  <path d="M65 50 L95 50 L80 80 L110 80 L70 130 L85 100 L65 100 Z" 
+        fill="url(#lightningGradient)" 
+        stroke="#fff" 
+        stroke-width="2"/>
+  
+  <!-- Charging plug icon - repositioned -->
+  <rect x="105" y="65" width="12" height="18" rx="3" fill="#fff" opacity="0.9"/>
+  <rect x="108" y="69" width="6" height="3" fill="url(#bgGradient)"/>
+  <rect x="108" y="75" width="6" height="3" fill="url(#bgGradient)"/>
+  
+  <!-- Small location pins around the circle -->
+  <circle cx="45" cy="45" r="3" fill="#fff" opacity="0.8"/>
+  <circle cx="135" cy="45" r="3" fill="#fff" opacity="0.8"/>
+  <circle cx="45" cy="135" r="3" fill="#fff" opacity="0.8"/>
+  <circle cx="135" cy="135" r="3" fill="#fff" opacity="0.8"/>
+  
+  <!-- Text "EV" at bottom -->
+  <text x="90" y="155" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#fff" text-anchor="middle">
+    EV
+  </text>
+  
+  <!-- Small "ChargeMap" text -->
+  <text x="90" y="170" font-family="Arial, sans-serif" font-size="10" fill="#fff" text-anchor="middle" opacity="0.9">
+    ChargeMap
+  </text>
+  
+  <!-- Subtle grid pattern overlay for "map" feel -->
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <circle cx="90" cy="90" r="70" fill="url(#grid)" opacity="0.3"/>
+</svg>
