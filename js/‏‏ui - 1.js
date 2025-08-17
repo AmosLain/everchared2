@@ -24,8 +24,7 @@ export const elements = {
     pageInfo: document.getElementById('pageInfo'),
     noResults: document.getElementById('noResults'),
     locationBtn: document.getElementById('locationBtn'),
-    clearFiltersBtn: document.getElementById('clearFiltersBtn'),
-    searchBox: document.getElementById('searchBox')
+    clearFiltersBtn: document.getElementById('clearFiltersBtn')
 };
 
 /**
@@ -262,11 +261,10 @@ export function updatePagination(currentPage, totalPages) {
 /**
  * Toggles the visibility of the "no results" message.
  * @param {boolean} show True to show, false to hide.
- * @param {number} stationCount The number of filtered stations.
  */
-export function toggleNoResults(show, stationCount) {
+export function toggleNoResults(show) {
     elements.noResults.style.display = show ? 'block' : 'none';
-    elements.pagination.style.display = show ? 'none' : (stationCount > CONFIG.ITEMS_PER_PAGE ? 'flex' : 'none');
+    elements.pagination.style.display = show ? 'none' : (elements.filteredStations.length > CONFIG.ITEMS_PER_PAGE ? 'flex' : 'none');
 }
 
 /**

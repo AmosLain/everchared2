@@ -122,7 +122,6 @@ export function clearAllFilters() {
         elements.searchBox.value = '';
     }
 
-    // Explicitly set the 'all' filter tags as active
     setActiveFilterTag(elements.stateFilters, elements.stateFilters.querySelector('[data-filter="all"]'));
     setActiveFilterTag(elements.networkFilters, elements.networkFilters.querySelector('[data-filter="all"]'));
     setActiveFilterTag(elements.chargerFilters, elements.chargerFilters.querySelector('[data-filter="all"]'));

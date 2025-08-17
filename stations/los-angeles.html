@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EV Charging Stations in Los Angeles, CA | EVMapFinder</title>
+  <meta name="description" content="Find EV charging stations in Los Angeles, CA. Filter by DC fast or Level 2 chargers, connector type, and networks with EVMapFinder."/>
+  <link rel="canonical" href="https://www.evmapfinder.com/stations/los-angeles"/>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage",
+   "name":"EV Charging Stations in Los Angeles, CA",
+   "url":"https://www.evmapfinder.com/stations/los-angeles",
+   "description":"Find EV charging stations in Los Angeles, CA with filters for DC fast, Level 2, connector type, and networks."}
+  </script>
+</head>
+<body>
+  <header>
+    <h1>EV Charging Stations in Los Angeles, CA</h1>
+    <p>Locate EV charging stations across Los Angeles with EVMapFinder. Filter by DC fast or Level 2, connector type, and network to find the best chargers for your trip.</p>
+  </header>
+
+  <main>
+    <div id="map"></div>
+  </main>
+
+  <script>
+    (function(){
+      var url=new URL(window.location.href);
+      if(!url.searchParams.get('q')){
+        url.searchParams.set('q','Los Angeles, CA');
+        history.replaceState(null,'',url.toString());
+      }
+    })();
+  </script>
+</body>
+</html>

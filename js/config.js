@@ -12,6 +12,6 @@ export const CONFIG = {
     // Application-specific settings
     ITEMS_PER_PAGE: 20,
     CACHE_DURATION: 1000 * 60 * 60, // 1 hour in milliseconds
-    DEFAULT_SEARCH_RADIUS: 50, // miles for 'Find Near Me'
+    DEFAULT_SEARCH_RADIUS: 200, // miles for 'Find Near Me'
     MAX_INITIAL_LOAD: 200, // NREL's default limit for a broad search
 };

@@ -1,0 +1,8 @@
+{
+  "trailingSlash": false,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/stations/(.*)", "destination": "/stations/$1.html" },
+    { "source": "/blog/(.*)", "destination": "/blog/$1.html" }
+  ]
+}

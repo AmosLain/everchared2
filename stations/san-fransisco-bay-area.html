@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EV Charging Stations in San Francisco Bay Area | EVMapFinder</title>
+  <meta name="description" content="Find EV charging stations across the San Francisco Bay Area. Filter by speed, connector, and network with EVMapFinder."/>
+  <link rel="canonical" href="https://www.evmapfinder.com/stations/san-francisco-bay-area"/>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage",
+   "name":"EV Charging Stations in San Francisco Bay Area",
+   "url":"https://www.evmapfinder.com/stations/san-francisco-bay-area",
+   "description":"Find EV charging stations in the San Francisco Bay Area with filters for DC fast, Level 2, connector type, and networks."}
+  </script>
+</head>
+<body>
+  <header>
+    <h1>EV Charging Stations in the San Francisco Bay Area</h1>
+    <p>EVMapFinder shows EV charging stations across the Bay Area, from San Francisco to Oakland and San Jose. Filter chargers by speed, connector type, and network.</p>
+  </header>
+
+  <main>
+    <div id="map"></div>
+  </main>
+
+  <script>
+    (function(){
+      var url=new URL(window.location.href);
+      if(!url.searchParams.get('q')){
+        url.searchParams.set('q','San Francisco Bay Area');
+        history.replaceState(null,'',url.toString());
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Primary SEO -->
+  <title>EV Charging Stations in New York, NY | EVMapFinder</title>
+  <meta name="description" content="Find EV charging stations in New York, NY. Use EVMapFinder to filter by DC fast or Level 2 chargers, connector type, and networks across NYC." />
+  <link rel="canonical" href="https://www.evmapfinder.com/stations/new-york" />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+
+  <!-- Favicons -->
+  <link rel="icon" href="/logo.png" sizes="any" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="EV Charging Stations in New York, NY | EVMapFinder" />
+  <meta property="og:description" content="Interactive EV charging map for New York. Filter by DC fast, Level 2, connector type, and networks." />
+  <meta property="og:url" content="https://www.evmapfinder.com/stations/new-york" />
+  <meta property="og:image" content="https://www.evmapfinder.com/logo.png" />
+  <meta property="og:site_name" content="EVMapFinder" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EV Charging Stations in New York, NY | EVMapFinder" />
+  <meta name="twitter:description" content="Find EV chargers in New York. Filter by speed, connector, and network." />
+  <meta name="twitter:image" content="https://www.evmapfinder.com/logo.png" />
+
+  <!-- Language -->
+  <meta http-equiv="content-language" content="en" />
+  <link rel="alternate" hreflang="en" href="https://www.evmapfinder.com/stations/new-york" />
+
+  <!-- Theme / perf hints -->
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- =========================
+       Schema.org JSON-LD
+       ========================= -->
+
+  <!-- WebPage about New York charging -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"EV Charging Stations in New York, NY",
+    "url":"https://www.evmapfinder.com/stations/new-york",
+    "description":"Find EV charging stations in New York, NY with filters for DC fast, Level 2, connector type, and networks."
+  }
+  </script>
+
+  <!-- FAQ for rich results (optional, edit anytime) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"How do I find EV charging stations in New York?",
+        "acceptedAnswer":{"@type":"Answer","text":"Use EVMapFinder and search for New York or ZIP codes like 10001. Filter by charger speed and connector type to refine results."}
+      },
+      {
+        "@type":"Question",
+        "name":"Does EVMapFinder include DC fast chargers in NYC?",
+        "acceptedAnswer":{"@type":"Answer","text":"Yes. You can view DC fast chargers and Level 2 stations citywide and along major routes."}
+      }
+    ]
+  }
+  </script>
+
+  <!-- Minimal inline styles for the text block (remove if your CSS covers it) -->
+  <style>
+    .container{max-width:960px;margin:1rem auto;padding:0 1rem}
+    .crumbs{font-size:.9rem;margin:.5rem 0}
+    .crumbs a{text-decoration:none}
+    .city-links{display:flex;gap:.75rem;flex-wrap:wrap;list-style:none;padding:0;margin:.5rem 0}
+    .city-links a{text-decoration:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    #map{width:100%;height:70vh;}
+  </style>
+</head>
+<body>
+  <!-- Breadcrumbs -->
+  <nav class="container crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> › <span>New York, NY</span>
+  </nav>
+
+  <!-- Indexable content -->
+  <header class="container" role="banner">
+    <h1>EV Charging Stations in New York, NY</h1>
+    <p>Use EVMapFinder to locate electric vehicle charging stations throughout New York City and nearby areas. Search by neighborhood or ZIP code and filter by charging speed (DC fast or Level 2), connector type, and network.</p>
+    <nav aria-label="Popular nearby cities">
+      <ul class="city-links">
+        <li><a href="/stations/newark">Newark, NJ</a></li>
+        <li><a href="/stations/jersey-city">Jersey City, NJ</a></li>
+        <li><a href="/stations/white-plains">White Plains, NY</a></li>
+        <li><a href="/stations/stamford">Stamford, CT</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container" role="main">
+    <!-- Map container (use your existing id if different) -->
+    <div id="map" aria-label="EV charging stations map for New York, NY"></div>
+
+    <!-- City search hint (your JS can hook into ?q=) -->
+    <form id="site-search" role="search" aria-label="Search by ZIP or neighborhood" style="margin-top:1rem">
+      <label for="q" class="sr-only">Search by ZIP or neighborhood</label>
+      <input id="q" name="q" type="search" placeholder="Search by ZIP or neighborhood (e.g., 10001 or Manhattan)" style="width:100%;max-width:480px;padding:.6rem" />
+    </form>
+  </main>
+
+  <noscript>Enable JavaScript to view EV charging stations in New York on the interactive map.</noscript>
+
+  <!-- ===== Include your existing JS files here (same as on your homepage) ===== -->
+  <!-- Example placeholders (replace with your actual script paths/order) -->
+  <!-- <script src="/js/vendor.js"></script> -->
+  <!-- <script src="/js/maplib.js"></script> -->
+  <!-- <script src="/js/script.js"></script> -->
+
+  <!-- Force the URL to carry ?q=New York, NY so your existing code can detect it -->
+  <script>
+    (function(){
+      var url = new URL(window.location.href);
+      if (!url.searchParams.get('q')) {
+        url.searchParams.set('q', 'New York, NY');
+        try { history.replaceState(null, '', url.toString()); } catch(e) { window.location.href = url.toString(); }
+      }
+    })();
+
+    // Simple hook for the on-page search box to update ?q=
+    (function () {
+      var form = document.getElementById('site-search');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var q = document.getElementById('q').value || '';
+        var url = new URL(window.location.href);
+        if (q) { url.searchParams.set('q', q); } else { url.searchParams.delete('q'); }
+        window.location.href = url.toString();
+      });
+    })();
+  </script>
+</body>
+</html>

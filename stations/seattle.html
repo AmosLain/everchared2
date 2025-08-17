@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EV Charging Stations in Seattle, WA | EVMapFinder</title>
+  <meta name="description" content="Find EV charging stations in Seattle, WA. Use EVMapFinder to filter chargers by speed, connector, and network."/>
+  <link rel="canonical" href="https://www.evmapfinder.com/stations/seattle"/>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage",
+   "name":"EV Charging Stations in Seattle, WA",
+   "url":"https://www.evmapfinder.com/stations/seattle",
+   "description":"Find EV charging stations in Seattle, WA with filters for DC fast, Level 2, connector type, and networks."}
+  </script>
+</head>
+<body>
+  <header>
+    <h1>EV Charging Stations in Seattle, WA</h1>
+    <p>Search for EV charging stations across Seattle with EVMapFinder. Filter by DC fast or Level 2 chargers, connector type, and network providers.</p>
+  </header>
+
+  <main>
+    <div id="map"></div>
+  </main>
+
+  <script>
+    (function(){
+      var url=new URL(window.location.href);
+      if(!url.searchParams.get('q')){
+        url.searchParams.set('q','Seattle, WA');
+        history.replaceState(null,'',url.toString());
+      }
+    })();
+  </script>
+</body>
+</html>
