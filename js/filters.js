@@ -1,7 +1,7 @@
 // FILTERS.JS FUNCTIONS (Manages filter logic and state updates)
 // This module contains the logic for filtering the station data based on user input.
 
-import { elements, setActiveFilterTag, renderStations } from './ui.js';
+import { elements, setActiveFilterTag, renderStations, toggleNoResults } from './ui.js';
 import { trackEvent, getDistance } from './utils.js';
 import { CONFIG } from './config.js';
 
@@ -103,6 +103,7 @@ export function applyAllFilters() {
     appState.filteredStations = tempStations;
     appState.totalPages = Math.ceil(appState.filteredStations.length / CONFIG.ITEMS_PER_PAGE);
     renderStations(appState.filteredStations, appState.currentPage, appState.userLocation);
+    toggleNoResults(appState.filteredStations.length === 0, appState.filteredStations.length);
 }
 
 /**
@@ -117,11 +118,14 @@ export function clearAllFilters() {
     };
     appState.userLocation = null;
 
-    document.getElementById('searchBox').value = '';
+    if (elements.searchBox) {
+        elements.searchBox.value = '';
+    }
 
+    // Explicitly set the 'all' filter tags as active
     setActiveFilterTag(elements.stateFilters, elements.stateFilters.querySelector('[data-filter="all"]'));
     setActiveFilterTag(elements.networkFilters, elements.networkFilters.querySelector('[data-filter="all"]'));
-    setActiveFilterTag(elements.chargerFilters, elements.networkFilters.querySelector('[data-filter="all"]'));
+    setActiveFilterTag(elements.chargerFilters, elements.chargerFilters.querySelector('[data-filter="all"]'));
 
     applyAllFilters();
     trackEvent('clear_filters');

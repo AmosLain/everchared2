@@ -1,6 +1,4 @@
-/*
- * Global Styles
- */
+/* style.css - Complete Fixed Version */
 :root {
     --primary-color: #007bff;
     --secondary-color: #6c757d;
@@ -51,9 +49,7 @@ a:hover {
     padding: 0 20px;
 }
 
-/*
- * Utility Classes
- */
+/* Utility Classes */
 .action-btn {
     display: inline-block;
     padding: 10px 20px;
@@ -84,9 +80,7 @@ a:hover {
     background-color: #dee2e6;
 }
 
-/*
- * Header and Navigation
- */
+/* Header and Navigation */
 header {
     background-color: var(--card-background);
     box-shadow: 0 2px 4px var(--shadow-color);
@@ -167,9 +161,7 @@ header {
     cursor: not-allowed;
 }
 
-/*
- * API Status Indicator
- */
+/* API Status Indicator */
 .api-status {
     position: fixed;
     top: 0;
@@ -219,9 +211,7 @@ header {
     display: none;
 }
 
-/*
- * Hero Section
- */
+/* Hero Section */
 .hero {
     text-align: center;
     padding: 4rem 0 2rem;
@@ -256,9 +246,7 @@ header {
     color: var(--primary-color);
 }
 
-/*
- * Stats Section
- */
+/* Stats Section */
 .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -297,9 +285,7 @@ header {
     margin-top: 10px;
 }
 
-/*
- * Filters Section
- */
+/* Filters Section */
 .filters {
     padding: 2rem 0;
     border-top: 1px solid var(--border-color);
@@ -346,14 +332,18 @@ header {
     margin-top: 10px;
 }
 
-/*
- * Stations Grid
- */
+/* Stations Grid - CRITICAL FIXES */
 .stations-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
     padding: 2rem 0;
+    min-height: 500px; /* Ensure space while loading */
+}
+
+/* Fix for initial display */
+.stations-grid:not(.loading) > .loading {
+    display: none !important;
 }
 
 .station-card {
@@ -361,21 +351,16 @@ header {
     border-radius: var(--border-radius);
     box-shadow: 0 4px 8px var(--shadow-color);
     overflow: hidden;
-    display: flex;
+    display: flex !important; /* Force display */
     flex-direction: column;
+    opacity: 1 !important; /* Override any animations */
+    transform: none !important; /* Reset transforms */
     transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
     border: 1px solid var(--border-color);
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-.station-card.loaded {
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .station-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) !important;
     box-shadow: 0 8px 16px var(--shadow-color);
 }
 
@@ -448,9 +433,7 @@ header {
     flex-wrap: wrap;
 }
 
-/*
- * Pagination
- */
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
@@ -485,18 +468,14 @@ header {
     color: var(--text-color);
 }
 
-/*
- * No Results Message
- */
+/* No Results Message */
 .no-results {
     text-align: center;
     padding: 4rem 0;
     color: var(--light-text-color);
 }
 
-/*
- * Footer
- */
+/* Footer */
 footer {
     background-color: var(--text-color);
     color: #fff;
@@ -535,9 +514,7 @@ footer {
     padding-top: 1rem;
 }
 
-/*
- * Animations
- */
+/* Animations */
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
@@ -547,9 +524,29 @@ footer {
     to { opacity: 1; }
 }
 
-/*
- * Responsive Design
- */
+/* Loading Spinner Styles */
+.stations-grid .loading {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    color: var(--light-text-color);
+    font-size: 1.1rem;
+}
+
+.stations-grid .loading .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
@@ -586,26 +583,15 @@ footer {
     }
 }
 
-/*
- * Custom spinner and loading styles for the grid
- */
-.stations-grid .loading {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 0;
-    color: var(--light-text-color);
-    font-size: 1.1rem;
+/* Critical Fixes for Initial Display */
+#stationsGrid {
+    display: grid !important;
+    visibility: visible !important;
 }
 
-.stations-grid .loading .spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top-color: var(--primary-color);
-    animation: spin 1s ease-in-out infinite;
-    margin-bottom: 1rem;
+.station-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
 }
