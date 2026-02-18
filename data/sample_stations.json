@@ -1,37 +1,6 @@
 [
-    {
-        "id": 123456,
-        "station_name": "Sample Station 1",
-        "street_address": "123 Main St",
-        "city": "Anytown",
-        "state": "CA",
-        "zip": "90210",
-        "latitude": 34.052235,
-        "longitude": -118.243683,
-        "ev_network": "ChargePoint",
-        "ev_level2_evse_num": 2,
-        "ev_dc_fast_num": 1,
-        "ev_connector_types": ["J1772", "CCS"],
-        "access_code": "public",
-        "access_days_time": "24 hours daily",
-        "station_phone": "555-123-4567",
-        "ev_network_web": "http://www.chargepoint.com"
-    },
-    {
-        "id": 654321,
-        "station_name": "Sample Supercharger",
-        "street_address": "456 Elm Ave",
-        "city": "Otherville",
-        "state": "NY",
-        "zip": "10001",
-        "latitude": 40.712776,
-        "longitude": -74.005974,
-        "ev_network": "Tesla",
-        "ev_dc_fast_num": 8,
-        "ev_connector_types": ["TESLA"],
-        "access_code": "public",
-        "access_days_time": "24 hours daily",
-        "station_phone": "",
-        "ev_network_web": "http://www.tesla.com"
-    }
+  { "id": 1, "name": "ChargePoint – Downtown", "address": "123 Main St", "city": "Chicago", "power": "DC 150kW", "lat": 41.883, "lng": -87.632 },
+  { "id": 2, "name": "EVgo – Mall", "address": "500 Shopping Ave", "city": "Oak Brook", "power": "DC 100kW", "lat": 41.836, "lng": -87.954 },
+  { "id": 3, "name": "Tesla Supercharger", "address": "77 Lake Shore Dr", "city": "Chicago", "power": "DC 250kW", "lat": 41.892, "lng": -87.614 },
+  { "id": 4, "name": "Level 2 – City Garage", "address": "10 W Madison", "city": "Chicago", "power": "AC 11kW", "lat": 41.882, "lng": -87.629 }
 ]
