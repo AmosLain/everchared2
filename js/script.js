@@ -1,276 +1,188 @@
-// script.js
-import { fetchStations } from './api.js';
-import { initializeFilters, applyFilter, applyAllFilters, clearAllFilters } from './filters.js';
-import { elements, updateApiStatus, showLoadingSpinner, renderStations, updateStats, populateFilters, setActiveFilterTag, disableButton } from './ui.js';
-import { trackEvent } from './utils.js';
+// SCRIPT.JS (Main application entry point)
+// This file initializes the application, sets up event listeners, and manages the global state.
+
 import { CONFIG } from './config.js';
+import { fetchStations } from './api.js';
+import * as ui from './ui.js';
+import * as filters from './filters.js';
+import { trackEvent, getUserLocation, getDistance } from './utils.js';
 
-// Application state - shared
-export const appState = {
-  allStations: [],
-  filteredStations: [],
-  currentFilters: {
-    state: 'all',
-    network: 'all',
-    charger: 'all',
-    search: ''
-  },
-  currentPage: 1,
-  totalPages: 1,
-  userLocation: null,
-  isInitialized: false
+// GLOBAL APP STATE
+// This object holds all the dynamic data and state of the application.
+const appState = {
+    allStations: [],
+    filteredStations: [],
+    currentPage: 1,
+    currentFilters: {
+        state: 'all',
+        network: 'all',
+        charger: 'all',
+        search: ''
+    },
+    userLocation: null,
+    totalPages: 1
 };
 
-window.appState = appState;
+// Initialize filters with the app state
+filters.initializeFilters(appState);
 
-// DOM Readiness Check
-function ensureCriticalDOMReady() {
-  return new Promise(resolve => {
-    if (document.readyState === 'complete' && 
-        elements.stationsGrid && 
-        elements.pagination) {
-      resolve();
-      return;
-    }
-
-    const checkInterval = setInterval(() => {
-      if (elements.stationsGrid && elements.pagination) {
-        clearInterval(checkInterval);
-        resolve();
-      }
-    }, 50);
-  });
-}
-
-// Event Listeners
-function setupEventListeners() {
-  let searchTimeout;
-  if (elements.searchBox) {
-    elements.searchBox.addEventListener('input', (e) => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        applyFilter('search', e.target.value);
-      }, 300);
-    });
-  }
-
-  if (elements.locationBtn) {
-    elements.locationBtn.addEventListener('click', handleLocationClick);
-  }
-
-  if (elements.clearFiltersBtn) {
-    elements.clearFiltersBtn.addEventListener('click', () => {
-      clearAllFilters();
-    });
-  }
-
-  if (elements.prevBtn) {
-    elements.prevBtn.addEventListener('click', () => {
-      if (appState.currentPage > 1) {
-        appState.currentPage--;
-        renderStations(appState.filteredStations, appState.currentPage, appState.userLocation);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  }
-
-  if (elements.nextBtn) {
-    elements.nextBtn.addEventListener('click', () => {
-      if (appState.currentPage < appState.totalPages) {
-        appState.currentPage++;
-        renderStations(appState.filteredStations, appState.currentPage, appState.userLocation);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  }
-
-  if (elements.stateFilters) {
-    elements.stateFilters.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-tag')) {
-        applyFilter('state', e.target.dataset.filter);
-        setActiveFilterTag(elements.stateFilters, e.target);
-      }
-    });
-  }
-
-  if (elements.networkFilters) {
-    elements.networkFilters.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-tag')) {
-        applyFilter('network', e.target.dataset.filter);
-        setActiveFilterTag(elements.networkFilters, e.target);
-      }
-    });
-  }
-
-  if (elements.chargerFilters) {
-    elements.chargerFilters.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-tag')) {
-        applyFilter('charger', e.target.dataset.filter);
-        setActiveFilterTag(elements.chargerFilters, e.target);
-      }
-    });
-  }
-}
-
-async function handleLocationClick() {
-  if (!navigator.geolocation) {
-    alert('Geolocation is not supported by your browser');
-    return;
-  }
-
-  const btn = elements.locationBtn;
-  disableButton(btn, true);
-  const original = btn ? btn.textContent : '';
-  if (btn) btn.textContent = '📍 Locating...';
-
-  try {
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000
-      });
-    });
-
-    appState.userLocation = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-
-    updateApiStatus('loading', 'Finding nearby stations...');
-    showLoadingSpinner(true);
-
-    const nearbyStations = await fetchStations(
-      appState.userLocation.latitude,
-      appState.userLocation.longitude,
-      CONFIG.DEFAULT_SEARCH_RADIUS * 2
-    );
-
-    if (nearbyStations && nearbyStations.length > 0) {
-      appState.allStations = nearbyStations;
-      appState.filteredStations = [...nearbyStations];
-
-      const states = [...new Set(nearbyStations.map(s => s.state).filter(Boolean))].sort();
-      const networks = [...new Set(nearbyStations.map(s => s.network).filter(Boolean))].sort();
-
-      populateFilters(elements.stateFilters, states, (state) => applyFilter('state', state));
-      populateFilters(elements.networkFilters, networks, (network) => applyFilter('network', network));
-
-      updateStats(appState.allStations);
-      applyAllFilters();
-      updateApiStatus('success', `Found ${nearbyStations.length} nearby stations!`);
-    } else {
-      updateApiStatus('error', 'No stations found nearby');
-    }
-  } catch (error) {
-    console.error('Location error:', error);
-    updateApiStatus('error', 'Could not get your location');
-  } finally {
-    if (btn) btn.textContent = original || '📍 Find Near Me';
-    disableButton(btn, false);
-    showLoadingSpinner(false);
-  }
-}
-
+/**
+ * The main function to initialize the application.
+ * It's called once the DOM content is fully loaded.
+ */
 async function initializeApp() {
-  console.log('🚀 Initializing EV Map Finder...');
-  try {
-    updateApiStatus('loading', 'Loading station data...');
-    showLoadingSpinner(true);
-    trackEvent('page_load');
+    try {
+        ui.updateApiStatus('loading', 'Loading initial station data...');
+        ui.showLoadingSpinner(true);
 
-    // Wait for DOM and critical elements
-    await ensureCriticalDOMReady();
-    
-    const stations = await fetchStations();
-    console.log(`✅ Loaded ${stations?.length || 0} stations`);
+        // Fetch initial set of stations
+        appState.allStations = await fetchStations();
+        appState.filteredStations = [...appState.allStations];
 
-    if (!stations || stations.length === 0) {
-      throw new Error('No stations loaded');
+        // Populate filters and update stats based on the initial data
+        ui.populateFilters(ui.elements.stateFilters, [...new Set(appState.allStations.map(s => s.state))].sort(), (filterValue) => filters.applyFilter('state', filterValue));
+        ui.populateFilters(ui.elements.networkFilters, [...new Set(appState.allStations.map(s => s.network))].sort(), (filterValue) => filters.applyFilter('network', filterValue));
+
+        filters.applyAllFilters();
+        ui.updateStats(appState.allStations);
+
+        ui.updateApiStatus('success', `Loaded ${appState.allStations.length} initial stations.`);
+    } catch (error) {
+        console.error('Failed to initialize app:', error);
+        ui.updateApiStatus('error', 'Failed to load stations. Please try refreshing.');
+        ui.showError('Failed to load station data. Please refresh the page.');
+    } finally {
+        ui.showLoadingSpinner(false);
     }
-
-    // Update state
-    appState.allStations = stations;
-    appState.filteredStations = [...stations];
-    appState.totalPages = Math.ceil(stations.length / CONFIG.ITEMS_PER_PAGE);
-
-    // Initialize filters
-    initializeFilters(appState);
-
-    // Extract filter values
-    const states = [...new Set(stations.map(s => s.state).filter(Boolean))].sort();
-    const networks = [...new Set(stations.map(s => s.network).filter(Boolean))].sort();
-
-    // Populate filters
-    if (elements.stateFilters && states.length > 0) {
-      populateFilters(elements.stateFilters, states, (state) => {
-        applyFilter('state', state);
-      });
-    }
-
-    if (elements.networkFilters && networks.length > 0) {
-      populateFilters(elements.networkFilters, networks, (network) => {
-        applyFilter('network', network);
-      });
-    }
-
-    updateStats(appState.allStations);
-
-    // CRITICAL: Force initial render before applying filters
-    console.log('🎨 Performing initial render...');
-    renderStations(appState.filteredStations, 1, null);
-
-    // Now apply filters (will trigger re-render if needed)
-    console.log('🔧 Applying initial filters...');
-    applyAllFilters();
-
-    // Set up event listeners
-    setupEventListeners();
-
-    appState.isInitialized = true;
-    showLoadingSpinner(false);
-    updateApiStatus('success', `${stations.length} stations ready!`);
-    console.log('✅ App initialized successfully!');
-
-    // Temporary debug check
-    setTimeout(() => {
-      if (appState.filteredStations.length > 0 && 
-          elements.stationsGrid.children.length === 0) {
-        console.warn('Emergency re-render triggered');
-        renderStations(appState.filteredStations, 1, null);
-      }
-    }, 500);
-
-  } catch (error) {
-    console.error('❌ Initialization error:', error);
-    updateApiStatus('error', 'Failed to load stations');
-    showLoadingSpinner(false);
-
-    if (appState.allStations?.length > 0) {
-      renderStations(appState.allStations, 1, null);
-    }
-  }
 }
 
-// Start the app with DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-  if (!elements.stationsGrid) {
-    console.error('Stations grid element not found!');
-    return;
-  }
-  
-  // Small delay to ensure all CSS is loaded
-  setTimeout(() => {
     initializeApp();
-  }, 50);
-});
 
-// Emergency render function for debugging
-window.emergencyRender = function() {
-  if (window.appState && window.appState.allStations.length > 0) {
-    console.log('🚨 Emergency render of', window.appState.allStations.length, 'stations');
-    renderStations(window.appState.allStations, 1, null);
-  } else {
-    console.error('No stations available to render');
-  }
-};
+    // Refresh button - forces a re-fetch
+    ui.elements.refreshBtn.addEventListener('click', async () => {
+        ui.disableButton(ui.elements.refreshBtn, true);
+        ui.updateApiStatus('loading', 'Refreshing station data...');
+        ui.showLoadingSpinner(true);
+
+        try {
+            appState.allStations = await fetchStations(null, null, null);
+            appState.filteredStations = [...appState.allStations];
+            appState.currentPage = 1;
+
+            ui.populateFilters(ui.elements.stateFilters, [...new Set(appState.allStations.map(s => s.state))].sort(), (filterValue) => filters.applyFilter('state', filterValue));
+            ui.populateFilters(ui.elements.networkFilters, [...new Set(appState.allStations.map(s => s.network))].sort(), (filterValue) => filters.applyFilter('network', filterValue));
+
+            filters.applyAllFilters();
+            ui.updateStats(appState.allStations);
+            ui.updateApiStatus('success', `Refreshed ${appState.allStations.length} stations!`);
+            trackEvent('refresh_data', { count: appState.allStations.length });
+        } catch (error) {
+            console.error('Refresh failed:', error);
+            ui.updateApiStatus('error', 'Refresh failed. Please try again.');
+            ui.showError('Could not refresh station data.');
+        } finally {
+            ui.disableButton(ui.elements.refreshBtn, false);
+            ui.showLoadingSpinner(false);
+        }
+    });
+
+    // ✅ FIXED: Find Near Me button
+    const locationBtn = ui.elements.locationBtn;
+    locationBtn.addEventListener('click', async () => {
+        ui.disableButton(ui.elements.locationBtn, true);
+        ui.updateApiStatus('loading', 'Finding your location and nearby stations...');
+        ui.showLoadingSpinner(true);
+
+        try {
+            appState.userLocation = await getUserLocation();
+
+            if (!appState.userLocation) {
+                ui.updateApiStatus('error', 'Location permission denied or failed.');
+                ui.showError('Location access denied. Please enable location services in your browser settings to use "Find Near Me".');
+                return;
+            }
+
+            ui.updateApiStatus('loading', 'Fetching stations near you...');
+
+            // Fetch stations within the configured radius (miles)
+            const radiusMiles = CONFIG.DEFAULT_SEARCH_RADIUS;
+
+            const fetchedStations = await fetchStations(
+                appState.userLocation.latitude,
+                appState.userLocation.longitude,
+                radiusMiles
+            );
+
+            // Safety: ensure we only show stations that are truly within radius + sort by nearest first
+            const nearbyStations = fetchedStations
+                .map(station => ({
+                    ...station,
+                    _distanceMiles: getDistance(
+                        appState.userLocation.latitude,
+                        appState.userLocation.longitude,
+                        station.latitude,
+                        station.longitude
+                    )
+                }))
+                .filter(station => Number.isFinite(station._distanceMiles) && station._distanceMiles <= radiusMiles)
+                .sort((a, b) => a._distanceMiles - b._distanceMiles)
+                .map(({ _distanceMiles, ...station }) => station);
+
+            // Update state
+            appState.allStations = nearbyStations;
+            appState.filteredStations = [...nearbyStations];
+            appState.currentPage = 1;
+
+            // Re-populate filters based on the new set of stations
+            ui.populateFilters(
+                ui.elements.stateFilters,
+                [...new Set(appState.allStations.map(s => s.state))].sort(),
+                (filterValue) => filters.applyFilter('state', filterValue)
+            );
+            ui.populateFilters(
+                ui.elements.networkFilters,
+                [...new Set(appState.allStations.map(s => s.network))].sort(),
+                (filterValue) => filters.applyFilter('network', filterValue)
+            );
+
+            ui.updateApiStatus('success', `Found ${nearbyStations.length} stations within ${radiusMiles} miles`);
+            filters.applyAllFilters();
+            ui.updateStats(appState.allStations);
+        } catch (error) {
+            console.error('Error getting location or fetching nearby stations:', error);
+            ui.updateApiStatus('error', 'Could not get location or fetch nearby stations.');
+            ui.showError('Error finding your location or fetching nearby stations. Please ensure location services are enabled.');
+        } finally {
+            ui.disableButton(ui.elements.locationBtn, false);
+            ui.showLoadingSpinner(false);
+        }
+    });
+
+    ui.elements.chargerFilters.addEventListener('click', (e) => {
+        // handled by populateFilters
+    });
+
+    // Search input
+    ui.elements.searchInput.addEventListener('input', (e) => {
+        filters.applySearch(e.target.value);
+    });
+
+    // Pagination
+    ui.elements.prevBtn.addEventListener('click', () => {
+        if (appState.currentPage > 1) {
+            appState.currentPage--;
+            ui.renderStations(appState.filteredStations, appState.currentPage, appState.userLocation);
+            ui.updatePaginationInfo(appState.currentPage, Math.ceil(appState.filteredStations.length / CONFIG.ITEMS_PER_PAGE));
+        }
+    });
+
+    ui.elements.nextBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(appState.filteredStations.length / CONFIG.ITEMS_PER_PAGE);
+        if (appState.currentPage < totalPages) {
+            appState.currentPage++;
+            ui.renderStations(appState.filteredStations, appState.currentPage, appState.userLocation);
+            ui.updatePaginationInfo(appState.currentPage, totalPages);
+        }
+    });
+});
