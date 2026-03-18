@@ -1,0 +1,50 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Script from "next/script";
+import { CONSENT_KEY } from "./CookieBanner";
+
+function safeGetStorage(key: string): string | null {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+export default function ConsentScripts() {
+  const [allowed, setAllowed] = useState(false);
+
+  useEffect(() => {
+    const existing = safeGetStorage(CONSENT_KEY);
+    setAllowed(existing === "accepted");
+
+    const handler = (e: any) => setAllowed(e.detail === "accepted");
+    window.addEventListener("evmf-cookie-consent", handler);
+    return () => window.removeEventListener("evmf-cookie-consent", handler);
+  }, []);
+
+  if (!allowed) return null;
+
+  return (
+    <>
+      {/* Google AdSense */}
+      <Script
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6510652100353402"
+        crossOrigin="anonymous"
+      />
+
+      {/* Google Ads Tag */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-17199339752"
+        strategy="afterInteractive"
+      />
+      <Script id="google-ads-tag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-17199339752');
+        `}
+      </Script>
+    </>
+  );
+}

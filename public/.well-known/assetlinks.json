@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.evmapfinder.app",
+      "sha256_cert_fingerprints": [
+        "B3:4D:88:DB:56:80:40:A6:6B:59:84:B6:C1:21:E6:D7:DC:DF:28:0E:76:1F:14:1F:AF:65:D1:56:D6:31:C5:9B"
+      ]
+    }
+  }
+]
